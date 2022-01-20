@@ -7,9 +7,7 @@ token = ""
 
 # Test balance
 url = esm.get_balance_url(address, token)
-
 response = requests.get(url)
-
 content = response.json()
 eth = esm.wei_to_eth(content.get("result"))
 print('Current ETH Balance: ' + str(eth))
@@ -17,7 +15,6 @@ print('Current ETH Balance: ' + str(eth))
 
 # Test tx
 url = esm.get_tx_url(address, token)
-
 response = requests.get(url)
 content = response.json()
 result = content.get('result')
