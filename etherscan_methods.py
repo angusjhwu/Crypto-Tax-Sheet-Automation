@@ -1,4 +1,6 @@
+import config
 from datetime import datetime as dt
+import requests
 
 
 def get_balance_url(address, token):
@@ -55,3 +57,30 @@ def print_tx(address, tx):
     else:
         print('Sent, from', tx_from, 'to', tx_to)
     print('Gas Fee:', wei_to_eth(int(gas_used) * int(gas_price)), 'ETH')
+
+
+def main():
+    # Test balance
+    url = get_balance_url(config.ADDRESS, config.ES_TOKEN)
+    response = requests.get(url)
+    content = response.json()
+    eth = wei_to_eth(content.get("result"))
+    print('Current ETH Balance: ' + str(eth))
+
+
+    # Test tx
+    url = get_tx_url(config.ADDRESS, config.ES_TOKEN, '', 1)
+    response = requests.get(url)
+    content = response.json()
+    tx = content.get('result')[0]
+    status = tx.get('isError')
+
+    if status:
+        print("Transaction successful")
+    else:
+        print("Transaction failed")
+    print_tx(config.ADDRESS, tx)
+
+
+if __name__ == '__main__':
+    main()
